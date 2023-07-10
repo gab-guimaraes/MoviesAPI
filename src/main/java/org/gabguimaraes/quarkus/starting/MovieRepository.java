@@ -1,17 +1,23 @@
 package org.gabguimaraes.quarkus.starting;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import software.amazon.awssdk.services.dynamodb.DynamoDbBaseClientBuilder;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @ApplicationScoped
 public class MovieRepository {
+
+    @Inject
+    DynamoDbClient dynamoDbBaseClient;
 
     public List<Movie> getAllMovies() {
         return List.of(
@@ -21,6 +27,16 @@ public class MovieRepository {
                 new Movie(4, "Twilight", 2008, "Drama, Fantasy, Romance"),
                 new Movie(5, "Harry Potter", 2001, "Adventure, Family, Fantasy")
         );
+    }
+
+    public Optional<Movie> insertMovie(Movie movie) {
+        Map<String, AttributeValue> itemValues = new HashMap<>();
+        itemValues.put("id", AttributeValue.builder().s(UUID.randomUUID().toString()).build());
+        itemValues.put("title", AttributeValue.builder().s(movie.getTitle()).build());
+        itemValues.put("year", AttributeValue.builder().s(String.valueOf(movie.getYear())).build());
+        itemValues.put("genre", AttributeValue.builder().s(movie.getGenre()).build());
+        dynamoDbBaseClient.putItem(builder -> builder.tableName("movies").item(itemValues));
+        return Optional.of(movie);
     }
 
     public int countAllMovies() {

@@ -1,15 +1,13 @@
 package org.gabguimaraes.quarkus.starting;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.jboss.logging.Logger;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
+
 
 @Path("/api/movies")
 public class MovieResource {
@@ -40,5 +38,14 @@ public class MovieResource {
     public Optional<Movie> getMovie(@PathParam("id") int id) {
         logger.info("return movie with id " + id);
         return movieRepository.getMovie(id);
+    }
+
+    @POST
+    @Path("/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Optional<Movie> insertMovie(Movie movie) {
+        logger.info("insert movie " + movie);
+        return movieRepository.insertMovie(movie);
     }
 }
