@@ -1,5 +1,6 @@
 package org.gabguimaraes.quarkus.starting;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -9,11 +10,9 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Optional;
 
-@Path("/api/movies")
-public class BookResource {
+@ApplicationScoped
+public class MovieRepository {
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
     public List<Movie> getAllMovies() {
         return List.of(
                 new Movie(1, "The Godfather", 1972, "Crime, Drama"),
@@ -24,16 +23,15 @@ public class BookResource {
         );
     }
 
-    @GET
-    @Path("/count")
-    @Produces(MediaType.TEXT_PLAIN)
     public int countAllMovies() {
         return getAllMovies().size();
     }
 
-    @GET
-    @Path("/{id}")
-    public Optional<Movie> countAllMovies(@PathParam("id") int id) {
+    public Optional<Movie> countAllMovies(int id) {
+        return getAllMovies().stream().filter(movie -> movie.getId() == id).findFirst();
+    }
+
+    public Optional<Movie> getMovie(int id) {
         return getAllMovies().stream().filter(movie -> movie.getId() == id).findFirst();
     }
 }
