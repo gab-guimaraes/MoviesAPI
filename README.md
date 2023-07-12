@@ -1,8 +1,15 @@
-# rest-book
+# rest-movies
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+
+## Initialize DynamoBB
+docker run -p 8000:8000 amazon/dynamodb-local
+
+## Create table
+aws dynamodb create-table --endpoint-url http://localhost:8000 --table-name movies --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
 
 ## Running the application in dev mode
 
@@ -58,3 +65,4 @@ If you want to learn more about building native executables, please consult http
 Easily start your RESTful Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+

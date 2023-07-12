@@ -33,12 +33,12 @@ public class MovieResource {
         return getAllMovies().size();
     }
 
-    @GET
-    @Path("/{id}")
-    public Optional<Movie> getMovie(@PathParam("id") int id) {
-        logger.info("return movie with id " + id);
-        return movieRepository.getMovie(id);
-    }
+//    @GET
+//    @Path("/{id}")
+//    public Optional<Movie> getMovie(@PathParam("id") int id) {
+//        logger.info("return movie with id " + id);
+//        return movieRepository.getMovie(id);
+//    }
 
     @POST
     @Path("/create")
